@@ -1,0 +1,2 @@
+# Rules
+LinkSanitizer Rules
