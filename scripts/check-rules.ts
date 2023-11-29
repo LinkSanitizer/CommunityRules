@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import YAML from "yaml";
-import { RuleSchema } from "../rule";
+import { RuleSchema } from "../schema.ts";
 
 const rules = YAML.parse(
   fs.readFileSync(path.join(__dirname, "../rules.yaml"), "utf8"),
@@ -13,27 +13,24 @@ function checkSchema() {
   });
 }
 
-function checkId() {
-  const ids = new Set<string>();
+function checkIdDoesNotExist() {
   rules.forEach((rule: any) => {
-    if (ids.has(rule.id)) {
-      throw new Error(`Duplicate ID in rule: ${rule.id}`);
+    if ("id" in rule) {
+      throw new Error(`ID in rule: ${rule.id}`);
     }
-    ids.add(rule.id);
   });
 
   const operations = rules.flatMap((rule: any) => rule.operations);
   operations.forEach((operation: any) => {
-    if (ids.has(operation.id)) {
-      throw new Error(`Duplicate ID in operation: ${operation.id}`);
+    if ("id" in operation) {
+      throw new Error(`ID in operation: ${operation.id}`);
     }
-    ids.add(operation.id);
   });
 }
 
 try {
   checkSchema();
-  checkId();
+  checkIdDoesNotExist();
 
   console.log("All rules are valid");
 } catch (error) {

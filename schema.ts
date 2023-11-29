@@ -64,7 +64,7 @@ export type MatchRule = z.infer<typeof matchRuleSchema>;
 
 // Operation
 const OperationSharedSchema = z.object({
-  id: z.string().uuid(),
+  id: z.string().uuid().optional(),
   type: z.string(),
 });
 
@@ -114,18 +114,21 @@ export type Operation = z.infer<typeof operationSchema>;
 // Rule
 export const RuleSchema = z.object({
   disabled: z.boolean().optional(),
-  id: z.string().uuid(),
+  id: z.string().uuid().optional(),
   name: z.string(),
-  matchRule: matchRuleSchema,
+  matcher: matchRuleSchema,
   operations: z.array(operationSchema),
-  note: z.string().optional(),
+  notes: z.string().optional(),
 });
 export type Rule = z.infer<typeof RuleSchema>;
+
+// Rule list
+export const RuleListSchema = z.array(RuleSchema);
 
 const sampleRule1: Rule = {
   id: "7db222e8-76a7-42ac-978d-05af9b76fb8c",
   name: "Sample Rule 1",
-  matchRule: {
+  matcher: {
     type: "contains",
     content: "example.com",
   },
@@ -141,13 +144,13 @@ const sampleRule1: Rule = {
       list: ["utm_source", "utm_medium", "utm_campaign"],
     },
   ],
-  note: "This is a sample rule",
+  notes: "This is a sample rule",
 };
 
 const sampleRule2: Rule = {
   id: "3d7dde67-8f48-4983-b00a-aaf405924d1e",
   name: "Sample Rule 2",
-  matchRule: {
+  matcher: {
     type: "regex",
     content: "/^https?:\\/\\/example\\.com\\//i",
   },
@@ -157,5 +160,5 @@ const sampleRule2: Rule = {
       type: "resolve",
     },
   ],
-  note: "This is another sample rule",
+  notes: "This is another sample rule",
 };

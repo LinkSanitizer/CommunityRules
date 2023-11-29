@@ -1,117 +1,66 @@
-- id: c799785e-953f-461b-af87-358a9c8ac3ac
-  name: Youtube
-  matchRule:
+# yaml-language-server: $schema=./schema.json
+
+# reference: https://webapps.stackexchange.com/questions/9863/are-the-parameters-for-www-youtube-com-watch-documented/9881#9881
+# input: https://youtu.be/dQw4w9WgXcQ?si=XXXX&t=3
+# output: https://youtu.be/dQw4w9WgXcQ?t=3
+- name: Youtube
+  matcher:
     type: domain
     content: youtu.be
   operations:
-    - id: d3cf2141-9f8f-4e15-b1b4-9a3c7710ab13
-      type: strip-params
+    - type: strip-params
       mode: allowlist
       list:
         - t
+        - list
+        - index
 
-- id: 7e1f82fd-fbd8-4dae-b063-2503f77ed0b2
-  name: Youtube
-  matchRule:
+# reference: https://webapps.stackexchange.com/questions/9863/are-the-parameters-for-www-youtube-com-watch-documented#9881
+# input: https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=XXXX&index=1&t=3
+# output: https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=XXXX&index=1&t=3
+- name: Youtube
+  matcher:
     type: starts-with
     content: youtube.com/watch
   operations:
-    - id: 981959b7-a8fb-47c8-8d21-6c16e60cef24
-      type: strip-params
+    - type: strip-params
       mode: allowlist
       list:
         - t
         - v
+        - list
+        - index
 
-- id: e3432d7a-b71a-4cac-b669-067b03313824
-  name: Google
-  matchRule:
+# reference: https://stackoverflow.com/questions/69660435/what-are-the-components-of-a-google-com-url-string#73704232
+- name: Google
+  matcher:
     type: regex
     content: ^.*\.google\..*\/search$
   operations:
-    - id: 6c475249-89d4-45ce-8684-a8ea9ef6c86c
-      type: strip-params
+    - type: strip-params
       mode: allowlist
       list:
         - q
         - tbm
 
-- id: f239a59d-a465-43e9-a52d-16ccf8fa1b57
-  name: Google Images
-  matchRule:
+# input: https://www.google.ca/imgres?imgurl=https://upload.wikimedia.org/wikipedia/commons/4/4e/Macaca_nigra_self-portrait_large.jpg&tbnid=RMEs9PyYz_laVM&vet=1&imgrefurl=https://en.wikipedia.org/wiki/Monkey_selfie_copyright_dispute&docid=Vl44k3ilp5mw8M&w=2912&h=4030&source=sh/x/im/m1/1
+# output: https://www.google.ca/imgres?tbnid=RMEs9PyYz_laVM&docid=Vl44k3ilp5mw8M
+- name: Google Images
+  matcher:
     type: regex
     content: ^.*\.google\..*\/imgres$
   operations:
-    - id: 130b3ea1-1237-4410-9f60-53972d6be22f
-      type: strip-params
+    - type: strip-params
       mode: allowlist
       list:
         - tbnid
         - docid
 
-- id: 4fd2ff29-f4dd-4a6c-9c9f-a8712c95e85d
-  name: Google Images
-  matchRule:
-    type: domain
-    content: images.app.goo.gl
-  operations:
-    - id: 88ab25d6-9dfb-4ab7-b70c-3b45381076d6
-      type: resolve
-    - id: 0b4eaaa2-decb-4b10-88da-6a6fa51b2088
-      type: rematch
-
-- id: 14b2b540-3208-4dca-a0c5-e8b01b343cc3
-  name: Twitter
-  matchRule:
-    type: domain
-    content: t.co
-  operations:
-    - id: 48fb2e06-ce34-4081-90a4-3c46373c9440
-      type: resolve
-    - id: 321d359e-f435-41e2-b0f7-4e542d1f7b46
-      type: rematch
-
-- id: b69ae4b7-4e9c-4f8e-978c-20f07dc603fb
-  name: Bitly
-  matchRule:
-    type: domain
-    content: bit.ly
-  operations:
-    - id: 6bea5b8c-d648-4f05-8db7-d504271d7950
-      type: resolve
-    - id: c778af82-e1cc-4314-bf0b-1e28e0c31298
-      type: rematch
-
-- id: c7b5a54a-cab4-4e2e-bb8c-e397104e663b
-  name: TinyURL
-  matchRule:
-    type: domain
-    content: tinyurl.com
-  operations:
-    - id: 544fdeb3-aadf-48fc-b80f-e710ea869d2a
-      type: resolve
-    - id: de768791-62c4-44b3-90f6-5cbd5494e743
-      type: rematch
-
-- id: 81a14066-1e96-4174-a8a6-3b54bba01ca4
-  name: Bilibili
-  matchRule:
-    type: domain
-    content: b23.tv
-  operations:
-    - id: 922d8d0c-72a4-47f1-a56d-0d40d978e418
-      type: resolve
-    - id: 6a431c4d-dd0b-44f0-be0f-4d243a0dd940
-      type: rematch
-
-- id: 1211b296-0105-4338-a985-39b184f7a041
-  name: onelink
-  matchRule:
+- name: onelink
+  matcher:
     type: domain
     content: go.onelink.me
   operations:
-    - id: 90db6f3c-2b8f-44ef-a61d-f78006c3ad3b
-      type: extract-param
+    - type: extract-param
       param: af_web_dp
-    - id: 46b1748c-a1bb-4a10-a116-60b8ab9691d3
-      type: rematch
+    - type: rematch

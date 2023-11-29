@@ -1,5 +1,7 @@
-# Rules
+# Community Rules
 
-Add your rules to `./rules.yaml`
+This repository contains the LinkSanitizer rules created by the community.
 
-To generate `id`s, use https://www.uuidgenerator.net/version4
+## Contributing
+
+Add your rules to [`rules.yaml`](./rules.yaml). See [`schema.ts`](./schema.ts) for the schema.
