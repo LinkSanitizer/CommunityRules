@@ -68,19 +68,21 @@ const OperationSharedSchema = z.object({
   type: z.string(),
 });
 
-const StripParamsOperationAllSchema = OperationSharedSchema.extend({
-  type: z.literal("strip-params"),
-  mode: z.enum(["allowlist", "blocklist"]),
+const StripParamsOperationModeListSchema = z.object({
+  type: z.enum(["allowlist", "blocklist"]),
   list: z.array(z.string()),
 });
-const StripParamsOperationWithListSchema = OperationSharedSchema.extend({
-  type: z.literal("strip-params"),
-  mode: z.literal("all"),
+const StripParamsOperationModeAllSchema = z.object({
+  type: z.literal("all"),
 });
-const StripParamsOperationSchema = z.union([
-  StripParamsOperationAllSchema,
-  StripParamsOperationWithListSchema,
+const StripParamsOperationModeSchema = z.union([
+  StripParamsOperationModeListSchema,
+  StripParamsOperationModeAllSchema,
 ]);
+const StripParamsOperationSchema = OperationSharedSchema.extend({
+  type: z.literal("strip-params"),
+  mode: StripParamsOperationModeSchema,
+});
 
 const ResolveOperationSchema = OperationSharedSchema.extend({
   type: z.literal("resolve"),
@@ -123,7 +125,11 @@ export const RuleSchema = z.object({
 export type Rule = z.infer<typeof RuleSchema>;
 
 // Rule list
-export const RuleListSchema = z.array(RuleSchema);
+export const RuleListSchema = z.object({
+  version: z.literal("1"),
+  rules: z.array(RuleSchema),
+});
+export type RuleList = z.infer<typeof RuleListSchema>;
 
 const sampleRule1: Rule = {
   id: "7db222e8-76a7-42ac-978d-05af9b76fb8c",
@@ -140,8 +146,10 @@ const sampleRule1: Rule = {
     {
       id: "95ba30eb-1d0d-4959-bb1c-786db1adc761",
       type: "strip-params",
-      mode: "blocklist",
-      list: ["utm_source", "utm_medium", "utm_campaign"],
+      mode: {
+        type: "blocklist",
+        list: ["utm_source", "utm_medium", "utm_campaign"],
+      },
     },
   ],
   notes: "This is a sample rule",

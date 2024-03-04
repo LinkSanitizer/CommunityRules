@@ -1,66 +1,72 @@
 # yaml-language-server: $schema=./schema.json
 
-# reference: https://webapps.stackexchange.com/questions/9863/are-the-parameters-for-www-youtube-com-watch-documented/9881#9881
-# input: https://youtu.be/dQw4w9WgXcQ?si=XXXX&t=3
-# output: https://youtu.be/dQw4w9WgXcQ?t=3
-- name: Youtube
-  matcher:
-    type: domain
-    content: youtu.be
-  operations:
-    - type: strip-params
-      mode: allowlist
-      list:
-        - t
-        - list
-        - index
+version: "1"
+rules:
+  # reference: https://webapps.stackexchange.com/questions/9863/are-the-parameters-for-www-youtube-com-watch-documented/9881#9881
+  # input: https://youtu.be/dQw4w9WgXcQ?si=XXXX&t=3
+  # output: https://youtu.be/dQw4w9WgXcQ?t=3
+  - name: Youtube
+    matcher:
+      type: domain
+      content: youtu.be
+    operations:
+      - type: strip-params
+        mode:
+          type: allowlist
+          list:
+            - t
+            - list
+            - index
 
-# reference: https://webapps.stackexchange.com/questions/9863/are-the-parameters-for-www-youtube-com-watch-documented#9881
-# input: https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=XXXX&index=1&t=3
-# output: https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=XXXX&index=1&t=3
-- name: Youtube
-  matcher:
-    type: starts-with
-    content: youtube.com/watch
-  operations:
-    - type: strip-params
-      mode: allowlist
-      list:
-        - t
-        - v
-        - list
-        - index
+  # reference: https://webapps.stackexchange.com/questions/9863/are-the-parameters-for-www-youtube-com-watch-documented#9881
+  # input: https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=XXXX&index=1&t=3
+  # output: https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=XXXX&index=1&t=3
+  - name: Youtube
+    matcher:
+      type: starts-with
+      content: youtube.com/watch
+    operations:
+      - type: strip-params
+        mode:
+          type: allowlist
+          list:
+            - t
+            - v
+            - list
+            - index
 
-# reference: https://stackoverflow.com/questions/69660435/what-are-the-components-of-a-google-com-url-string#73704232
-- name: Google
-  matcher:
-    type: regex
-    content: ^.*\.google\..*\/search$
-  operations:
-    - type: strip-params
-      mode: allowlist
-      list:
-        - q
-        - tbm
+  # reference: https://stackoverflow.com/questions/69660435/what-are-the-components-of-a-google-com-url-string#73704232
+  - name: Google
+    matcher:
+      type: regex
+      content: ^.*\.google\..*\/search$
+    operations:
+      - type: strip-params
+        mode:
+          type: allowlist
+          list:
+            - q
+            - tbm
 
-# input: https://www.google.ca/imgres?imgurl=https://upload.wikimedia.org/wikipedia/commons/4/4e/Macaca_nigra_self-portrait_large.jpg&tbnid=RMEs9PyYz_laVM&vet=1&imgrefurl=https://en.wikipedia.org/wiki/Monkey_selfie_copyright_dispute&docid=Vl44k3ilp5mw8M&w=2912&h=4030&source=sh/x/im/m1/1
-# output: https://www.google.ca/imgres?tbnid=RMEs9PyYz_laVM&docid=Vl44k3ilp5mw8M
-- name: Google Images
-  matcher:
-    type: regex
-    content: ^.*\.google\..*\/imgres$
-  operations:
-    - type: strip-params
-      mode: allowlist
-      list:
-        - tbnid
-        - docid
+  # input: https://www.google.ca/imgres?imgurl=https://upload.wikimedia.org/wikipedia/commons/4/4e/Macaca_nigra_self-portrait_large.jpg&tbnid=RMEs9PyYz_laVM&vet=1&imgrefurl=https://en.wikipedia.org/wiki/Monkey_selfie_copyright_dispute&docid=Vl44k3ilp5mw8M&w=2912&h=4030&source=sh/x/im/m1/1
+  # output: https://www.google.ca/imgres?tbnid=RMEs9PyYz_laVM&docid=Vl44k3ilp5mw8M
+  - name: Google Images
+    matcher:
+      type: regex
+      content: ^.*\.google\..*\/imgres$
+    operations:
+      - type: strip-params
+        mode:
+          type: allowlist
+          list:
+            - tbnid
+            - docid
 
-- name: onelink
-  matcher:
-    type: domain
-    content: go.onelink.me
-  operations:
-    - type: extract-param
-      param: af_web_dp
-    - type: rematch
+  - name: onelink
+    matcher:
+      type: domain
+      content: go.onelink.me
+    operations:
+      - type: extract-param
+        param: af_web_dp
+      - type: rematch

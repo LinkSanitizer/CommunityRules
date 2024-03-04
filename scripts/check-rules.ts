@@ -1,26 +1,24 @@
 import fs from "node:fs";
 import path from "node:path";
 import YAML from "yaml";
-import { RuleSchema } from "../schema.ts";
+import { RuleList, RuleListSchema } from "../schema.ts";
 
-const rules = YAML.parse(
+const list = YAML.parse(
   fs.readFileSync(path.join(__dirname, "../rules.yaml"), "utf8"),
-);
+) as RuleList;
 
 function checkSchema() {
-  rules.forEach((rule: any) => {
-    RuleSchema.parse(rule);
-  });
+  RuleListSchema.parse(list);
 }
 
 function checkIdDoesNotExist() {
-  rules.forEach((rule: any) => {
+  list.rules.forEach((rule: any) => {
     if ("id" in rule) {
       throw new Error(`ID in rule: ${rule.id}`);
     }
   });
 
-  const operations = rules.flatMap((rule: any) => rule.operations);
+  const operations = list.rules.flatMap((rule: any) => rule.operations);
   operations.forEach((operation: any) => {
     if ("id" in operation) {
       throw new Error(`ID in operation: ${operation.id}`);

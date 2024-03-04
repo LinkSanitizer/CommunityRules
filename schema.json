@@ -1,94 +1,99 @@
 {
-  "type": "array",
-  "items": {
-    "type": "object",
-    "properties": {
-      "disabled": {
-        "type": "boolean"
-      },
-      "id": {
-        "type": "string",
-        "format": "uuid"
-      },
-      "name": {
-        "type": "string"
-      },
-      "matcher": {
-        "anyOf": [
-          {
-            "type": "object",
-            "properties": {
-              "type": {
-                "type": "string",
-                "const": "regex"
-              },
-              "content": {
-                "type": "string"
-              }
-            },
-            "required": ["type", "content"],
-            "additionalProperties": false
+  "type": "object",
+  "properties": {
+    "version": {
+      "type": "string",
+      "const": "1"
+    },
+    "rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "disabled": {
+            "type": "boolean"
           },
-          {
-            "type": "object",
-            "properties": {
-              "type": {
-                "type": "string",
-                "const": "contains"
-              },
-              "content": {
-                "type": "string"
-              }
-            },
-            "required": ["type", "content"],
-            "additionalProperties": false
+          "id": {
+            "type": "string",
+            "format": "uuid"
           },
-          {
-            "type": "object",
-            "properties": {
-              "type": {
-                "type": "string",
-                "const": "starts-with"
-              },
-              "content": {
-                "type": "string"
-              }
-            },
-            "required": ["type", "content"],
-            "additionalProperties": false
+          "name": {
+            "type": "string"
           },
-          {
-            "type": "object",
-            "properties": {
-              "type": {
-                "type": "string",
-                "const": "domain"
+          "matcher": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "regex"
+                  },
+                  "content": {
+                    "type": "string"
+                  }
+                },
+                "required": ["type", "content"],
+                "additionalProperties": false
               },
-              "content": {
-                "type": "string"
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "contains"
+                  },
+                  "content": {
+                    "type": "string"
+                  }
+                },
+                "required": ["type", "content"],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "starts-with"
+                  },
+                  "content": {
+                    "type": "string"
+                  }
+                },
+                "required": ["type", "content"],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "domain"
+                  },
+                  "content": {
+                    "type": "string"
+                  }
+                },
+                "required": ["type", "content"],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "all"
+                  }
+                },
+                "required": ["type"],
+                "additionalProperties": false
               }
-            },
-            "required": ["type", "content"],
-            "additionalProperties": false
+            ]
           },
-          {
-            "type": "object",
-            "properties": {
-              "type": {
-                "type": "string",
-                "const": "all"
-              }
-            },
-            "required": ["type"],
-            "additionalProperties": false
-          }
-        ]
-      },
-      "operations": {
-        "type": "array",
-        "items": {
-          "anyOf": [
-            {
+          "operations": {
+            "type": "array",
+            "items": {
               "anyOf": [
                 {
                   "type": "object",
@@ -102,93 +107,99 @@
                       "const": "strip-params"
                     },
                     "mode": {
-                      "type": "string",
-                      "enum": ["allowlist", "blocklist"]
-                    },
-                    "list": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": ["allowlist", "blocklist"]
+                            },
+                            "list": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "required": ["type", "list"],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "const": "all"
+                            }
+                          },
+                          "required": ["type"],
+                          "additionalProperties": false
+                        }
+                      ]
                     }
                   },
-                  "required": ["type", "mode", "list"],
+                  "required": ["type", "mode"],
                   "additionalProperties": false
                 },
                 {
                   "type": "object",
                   "properties": {
                     "id": {
-                      "$ref": "#/items/properties/operations/items/anyOf/0/anyOf/0/properties/id"
+                      "$ref": "#/properties/rules/items/properties/operations/items/anyOf/0/properties/id"
                     },
                     "type": {
                       "type": "string",
-                      "const": "strip-params"
-                    },
-                    "mode": {
-                      "type": "string",
-                      "const": "all"
+                      "const": "resolve"
                     }
                   },
-                  "required": ["type", "mode"],
+                  "required": ["type"],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/properties/rules/items/properties/operations/items/anyOf/0/properties/id"
+                    },
+                    "type": {
+                      "type": "string",
+                      "const": "rematch"
+                    }
+                  },
+                  "required": ["type"],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/properties/rules/items/properties/operations/items/anyOf/0/properties/id"
+                    },
+                    "type": {
+                      "type": "string",
+                      "const": "extract-param"
+                    },
+                    "param": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["type", "param"],
                   "additionalProperties": false
                 }
               ]
-            },
-            {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "$ref": "#/items/properties/operations/items/anyOf/0/anyOf/0/properties/id"
-                },
-                "type": {
-                  "type": "string",
-                  "const": "resolve"
-                }
-              },
-              "required": ["type"],
-              "additionalProperties": false
-            },
-            {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "$ref": "#/items/properties/operations/items/anyOf/0/anyOf/0/properties/id"
-                },
-                "type": {
-                  "type": "string",
-                  "const": "rematch"
-                }
-              },
-              "required": ["type"],
-              "additionalProperties": false
-            },
-            {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "$ref": "#/items/properties/operations/items/anyOf/0/anyOf/0/properties/id"
-                },
-                "type": {
-                  "type": "string",
-                  "const": "extract-param"
-                },
-                "param": {
-                  "type": "string"
-                }
-              },
-              "required": ["type", "param"],
-              "additionalProperties": false
             }
-          ]
-        }
-      },
-      "notes": {
-        "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          }
+        },
+        "required": ["name", "matcher", "operations"],
+        "additionalProperties": false
       }
-    },
-    "required": ["name", "matcher", "operations"],
-    "additionalProperties": false
+    }
   },
+  "required": ["version", "rules"],
+  "additionalProperties": false,
   "$schema": "http://json-schema.org/draft-07/schema#"
 }
