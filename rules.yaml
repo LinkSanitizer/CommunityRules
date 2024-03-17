@@ -23,7 +23,7 @@ rules:
   # output: https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=XXXX&index=1&t=3
   - name: Youtube
     matcher:
-      type: starts-with
+      type: contains
       content: youtube.com/watch
     operations:
       - type: strip-params
