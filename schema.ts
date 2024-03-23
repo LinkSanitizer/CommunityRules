@@ -60,7 +60,7 @@ export const matchRuleSchema = z.union([
   domainMatchRuleSchema,
   allMatchRuleSchema,
 ]);
-export type MatchRule = z.infer<typeof matchRuleSchema>;
+export type MatchRule = z.input<typeof matchRuleSchema>;
 
 // Operation
 const OperationSharedSchema = z.object({
@@ -84,8 +84,22 @@ const StripParamsOperationSchema = OperationSharedSchema.extend({
   mode: StripParamsOperationModeSchema,
 });
 
+const ResolveOperationModeHttpSchema = z.object({
+  type: z.literal("http"),
+  timeoutMillis: z.number().optional().default(10000),
+});
+const ResolveOperationModeBrowserSchema = z.object({
+  type: z.literal("browser"),
+  timeoutMillis: z.number().optional().default(10000),
+  delayMillis: z.number().optional().default(1000),
+});
+const ResolveOperationModeSchema = z.union([
+  ResolveOperationModeHttpSchema,
+  ResolveOperationModeBrowserSchema,
+]);
 const ResolveOperationSchema = OperationSharedSchema.extend({
   type: z.literal("resolve"),
+  mode: ResolveOperationModeSchema.default({ type: "browser" }),
 });
 
 /**
@@ -111,7 +125,7 @@ export const operationSchema = z.union([
   RematchOperationSchema,
   ExtractParamsOperationSchema,
 ]);
-export type Operation = z.infer<typeof operationSchema>;
+export type Operation = z.input<typeof operationSchema>;
 
 // Rule
 export const RuleSchema = z.object({
@@ -122,14 +136,14 @@ export const RuleSchema = z.object({
   operations: z.array(operationSchema),
   notes: z.string().optional(),
 });
-export type Rule = z.infer<typeof RuleSchema>;
+export type Rule = z.input<typeof RuleSchema>;
 
 // Rule list
 export const RuleListSchema = z.object({
   version: z.literal("1"),
   rules: z.array(RuleSchema),
 });
-export type RuleList = z.infer<typeof RuleListSchema>;
+export type RuleList = z.input<typeof RuleListSchema>;
 
 const sampleRule1: Rule = {
   id: "7db222e8-76a7-42ac-978d-05af9b76fb8c",
@@ -166,6 +180,9 @@ const sampleRule2: Rule = {
     {
       id: "ef96155e-7fd3-4a15-b871-4e5fa8b83143",
       type: "resolve",
+      mode: {
+        type: "browser",
+      },
     },
   ],
   notes: "This is another sample rule",
