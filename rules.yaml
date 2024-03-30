@@ -43,7 +43,7 @@ rules:
   - name: Google
     matcher:
       type: regex
-      content: ^.*\.google\..*\/search$
+      content: ^.*\.google\..*\/search.*$
     operations:
       - type: strip-params
         mode:
@@ -57,7 +57,7 @@ rules:
   - name: Google Images
     matcher:
       type: regex
-      content: ^.*\.google\..*\/imgres$
+      content: ^.*\.google\..*\/imgres.*$
     operations:
       - type: strip-params
         mode:
