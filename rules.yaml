@@ -66,6 +66,21 @@ rules:
             - tbnid
             - docid
 
+  # input: https://maps.app.goo.gl/kAgRegKmeQFW2Kx96
+  # output: https://www.google.ca/maps/place/Eiffel+Tower/@48.8583701,2.2944813,15z/data=!4m6!3m5!1s0x47e66e2964e34e2d:0x8ddca9ee380ef7e0!8m2!3d48.8583701!4d2.2944813!16zL20vMDJqODE
+  - name: Google Maps
+    matcher:
+      type: domain
+      content: maps.app.goo.gl
+    operations:
+      - type: resolve
+        mode:
+          # Google Maps redirects in JS
+          type: browser
+      - type: strip-params
+        mode:
+          type: all
+
   - name: onelink
     matcher:
       type: domain
