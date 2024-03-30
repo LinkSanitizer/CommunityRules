@@ -88,6 +88,54 @@
                 },
                 "required": ["type"],
                 "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "and"
+                  },
+                  "matchers": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/properties/rules/items/properties/matcher"
+                    }
+                  }
+                },
+                "required": ["type", "matchers"],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "or"
+                  },
+                  "matchers": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/properties/rules/items/properties/matcher"
+                    }
+                  }
+                },
+                "required": ["type", "matchers"],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "not"
+                  },
+                  "matchers": {
+                    "$ref": "#/properties/rules/items/properties/matcher"
+                  }
+                },
+                "required": ["type", "matchers"],
+                "additionalProperties": false
               }
             ]
           },

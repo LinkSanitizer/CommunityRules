@@ -53,12 +53,45 @@ const allMatchRuleSchema = matchRuleSharedSchema.extend({
   type: z.literal("all"),
 });
 
+interface AndMatchRule {
+  type: "and";
+  matchers: MatchRule[];
+}
+const andMatchRuleSchema: z.ZodType<AndMatchRule> =
+  matchRuleSharedSchema.extend({
+    type: z.literal("and"),
+    matchers: z.lazy(() => z.array(matchRuleSchema)),
+  });
+
+interface OrMatchRule {
+  type: "or";
+  matchers: MatchRule[];
+}
+const orMatchRuleSchema: z.ZodType<OrMatchRule> = matchRuleSharedSchema.extend({
+  type: z.literal("or"),
+  matchers: z.lazy(() => z.array(matchRuleSchema)),
+});
+
+interface NotMatchRule {
+  type: "not";
+  matchers: MatchRule;
+}
+const notMatchRuleSchema: z.ZodType<NotMatchRule> =
+  matchRuleSharedSchema.extend({
+    type: z.literal("not"),
+    matchers: z.lazy(() => matchRuleSchema),
+  });
+
 export const matchRuleSchema = z.union([
   regexMatchRuleSchema,
   containsMatchRuleSchema,
   startsWithMatchRuleSchema,
   domainMatchRuleSchema,
   allMatchRuleSchema,
+
+  andMatchRuleSchema,
+  orMatchRuleSchema,
+  notMatchRuleSchema,
 ]);
 export type MatchRule = z.input<typeof matchRuleSchema>;
 
