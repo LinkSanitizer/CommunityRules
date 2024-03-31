@@ -119,11 +119,9 @@ const StripParamsOperationSchema = OperationSharedSchema.extend({
 
 const ResolveOperationModeHttpSchema = z.object({
   type: z.literal("http"),
-  timeoutMillis: z.number().optional().default(10000),
 });
 const ResolveOperationModeBrowserSchema = z.object({
   type: z.literal("browser"),
-  timeoutMillis: z.number().optional().default(10000),
   delayMillis: z.number().optional().default(1000),
 });
 const ResolveOperationModeSchema = z.union([

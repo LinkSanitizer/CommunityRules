@@ -208,10 +208,6 @@
                             "type": {
                               "type": "string",
                               "const": "http"
-                            },
-                            "timeoutMillis": {
-                              "type": "number",
-                              "default": 10000
                             }
                           },
                           "required": ["type"],
@@ -223,10 +219,6 @@
                             "type": {
                               "type": "string",
                               "const": "browser"
-                            },
-                            "timeoutMillis": {
-                              "type": "number",
-                              "default": 10000
                             },
                             "delayMillis": {
                               "type": "number",
