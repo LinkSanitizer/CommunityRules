@@ -89,3 +89,16 @@ rules:
       - type: extract-param
         param: af_web_dp
       - type: rematch
+
+  - name: X
+    matcher:
+      type: or
+      matchers:
+        - type: domain
+          content: x.com
+        - type: domain
+          content: twitter.com
+    operations:
+      - type: strip-params
+        mode:
+          type: all
