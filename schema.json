@@ -230,7 +230,7 @@
                         }
                       ],
                       "default": {
-                        "type": "browser"
+                        "type": "http"
                       }
                     }
                   },

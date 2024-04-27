@@ -130,7 +130,7 @@ const ResolveOperationModeSchema = z.union([
 ]);
 const ResolveOperationSchema = OperationSharedSchema.extend({
   type: z.literal("resolve"),
-  mode: ResolveOperationModeSchema.default({ type: "browser" }),
+  mode: ResolveOperationModeSchema.default({ type: "http" }),
 });
 
 /**
