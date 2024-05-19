@@ -1,14 +1,14 @@
 import { z } from "zod";
 
 // Match rule
-const matchRuleSharedSchema = z.object({
+const matcherSharedSchema = z.object({
   type: z.string(),
 });
 
 /**
  * Match rule for regex ignoring the protocol
  */
-const regexMatchRuleSchema = matchRuleSharedSchema.extend({
+const regexMatcherSchema = matcherSharedSchema.extend({
   type: z.literal("regex"),
   content: z.string(),
   caseSensitive: z.boolean().optional().default(false),
@@ -21,7 +21,7 @@ const regexMatchRuleSchema = matchRuleSharedSchema.extend({
  *                                    `https://www.example.com/path`, `https://www.example.com/path/`, and
  *                                    `https://www.example.com/path/b`
  */
-const containsMatchRuleSchema = matchRuleSharedSchema.extend({
+const containsMatcherSchema = matcherSharedSchema.extend({
   type: z.literal("contains"),
   content: z.string(),
 });
@@ -33,7 +33,7 @@ const containsMatchRuleSchema = matchRuleSharedSchema.extend({
  *                                    `https://www.example.com/path`, `https://www.example.com/path/`, and
  *                                    `https://www.example.com/path/b`
  */
-const startsWithMatchRuleSchema = matchRuleSharedSchema.extend({
+const startsWithMatcherSchema = matcherSharedSchema.extend({
   type: z.literal("starts-with"),
   content: z.string(),
 });
@@ -42,7 +42,7 @@ const startsWithMatchRuleSchema = matchRuleSharedSchema.extend({
  * Match rule for domain name including subdomains
  * e.g. `example.com` will match `http://example.com`, `https://example.com`, and `https://www.example.com`
  */
-const domainMatchRuleSchema = matchRuleSharedSchema.extend({
+const domainMatcherSchema = matcherSharedSchema.extend({
   type: z.literal("domain"),
   content: z.string(),
 });
@@ -50,51 +50,49 @@ const domainMatchRuleSchema = matchRuleSharedSchema.extend({
 /**
  * Match everything, can only be used as the last rule
  */
-const allMatchRuleSchema = matchRuleSharedSchema.extend({
+const allMatcherSchema = matcherSharedSchema.extend({
   type: z.literal("all"),
 });
 
-interface AndMatchRule {
+interface AndMatcher {
   type: "and";
-  matchers: MatchRule[];
+  matchers: Matcher[];
 }
-const andMatchRuleSchema: z.ZodType<AndMatchRule> =
-  matchRuleSharedSchema.extend({
-    type: z.literal("and"),
-    matchers: z.lazy(() => z.array(matchRuleSchema)),
-  });
-
-interface OrMatchRule {
-  type: "or";
-  matchers: MatchRule[];
-}
-const orMatchRuleSchema: z.ZodType<OrMatchRule> = matchRuleSharedSchema.extend({
-  type: z.literal("or"),
-  matchers: z.lazy(() => z.array(matchRuleSchema)),
+const andMatcherSchema: z.ZodType<AndMatcher> = matcherSharedSchema.extend({
+  type: z.literal("and"),
+  matchers: z.lazy(() => z.array(matcherSchema)),
 });
 
-interface NotMatchRule {
-  type: "not";
-  matchers: MatchRule;
+interface OrMatcher {
+  type: "or";
+  matchers: Matcher[];
 }
-const notMatchRuleSchema: z.ZodType<NotMatchRule> =
-  matchRuleSharedSchema.extend({
-    type: z.literal("not"),
-    matchers: z.lazy(() => matchRuleSchema),
-  });
+const orMatcherSchema: z.ZodType<OrMatcher> = matcherSharedSchema.extend({
+  type: z.literal("or"),
+  matchers: z.lazy(() => z.array(matcherSchema)),
+});
 
-export const matchRuleSchema = z.union([
-  regexMatchRuleSchema,
-  containsMatchRuleSchema,
-  startsWithMatchRuleSchema,
-  domainMatchRuleSchema,
-  allMatchRuleSchema,
+interface NotMatcher {
+  type: "not";
+  matchers: Matcher;
+}
+const notMatcherSchema: z.ZodType<NotMatcher> = matcherSharedSchema.extend({
+  type: z.literal("not"),
+  matchers: z.lazy(() => matcherSchema),
+});
 
-  andMatchRuleSchema,
-  orMatchRuleSchema,
-  notMatchRuleSchema,
+export const matcherSchema = z.union([
+  regexMatcherSchema,
+  containsMatcherSchema,
+  startsWithMatcherSchema,
+  domainMatcherSchema,
+  allMatcherSchema,
+
+  andMatcherSchema,
+  orMatcherSchema,
+  notMatcherSchema,
 ]);
-export type MatchRule = z.input<typeof matchRuleSchema>;
+export type Matcher = z.input<typeof matcherSchema>;
 
 // Operation
 const OperationSharedSchema = z.object({
@@ -164,7 +162,7 @@ export const RuleSchema = z.object({
   disabled: z.boolean().optional(),
   id: z.string().uuid().optional(),
   name: z.string(),
-  matcher: matchRuleSchema,
+  matcher: matcherSchema,
   operations: z.array(operationSchema),
   notes: z.string().optional(),
 });
