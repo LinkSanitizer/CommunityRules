@@ -134,11 +134,11 @@
                     "type": "string",
                     "const": "not"
                   },
-                  "matchers": {
+                  "matcher": {
                     "$ref": "#/properties/rules/items/properties/matcher"
                   }
                 },
-                "required": ["type", "matchers"],
+                "required": ["type", "matcher"],
                 "additionalProperties": false
               }
             ]

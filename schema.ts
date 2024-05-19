@@ -74,11 +74,11 @@ const orMatcherSchema: z.ZodType<OrMatcher> = matcherSharedSchema.extend({
 
 interface NotMatcher {
   type: "not";
-  matchers: Matcher;
+  matcher: Matcher;
 }
 const notMatcherSchema: z.ZodType<NotMatcher> = matcherSharedSchema.extend({
   type: z.literal("not"),
-  matchers: z.lazy(() => matcherSchema),
+  matcher: z.lazy(() => matcherSchema),
 });
 
 export const matcherSchema = z.union([
