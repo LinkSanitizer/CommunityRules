@@ -11,6 +11,7 @@ const matchRuleSharedSchema = z.object({
 const regexMatchRuleSchema = matchRuleSharedSchema.extend({
   type: z.literal("regex"),
   content: z.string(),
+  caseSensitive: z.boolean().optional().default(false),
 });
 
 /**

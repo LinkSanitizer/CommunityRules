@@ -31,6 +31,10 @@
                   },
                   "content": {
                     "type": "string"
+                  },
+                  "caseSensitive": {
+                    "type": "boolean",
+                    "default": false
                   }
                 },
                 "required": ["type", "content"],
