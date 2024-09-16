@@ -19,7 +19,12 @@ jobs:
       - run: npm test
       - name: Read rules.yaml
         id: get-rules
-        run: echo "rules=$(cat rules.yaml)" >> $GITHUB_OUTPUT
+        run: |
+          {
+            echo 'rules<<EOF'
+            cat rules.yaml
+            echo EOF
+          } >> "$GITHUB_ENV"
       - name: Deploy
         uses: fjogeleit/http-request-action@v1
         with:
