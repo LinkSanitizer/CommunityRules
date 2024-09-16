@@ -19,16 +19,13 @@ jobs:
       - run: npm test
       - name: Read rules.yaml
         id: get-rules
-        run: |
-          {
-            echo 'rules<<EOF'
-            cat rules.yaml
-            echo EOF
-          } >> "$GITHUB_ENV"
+        uses: jaywcjlove/github-action-read-file@main
+        with:
+          path: rules.yaml
       - name: Deploy
         uses: fjogeleit/http-request-action@v1
         with:
           url: "https://linksanitizer.com/api/v1/community-rules"
           method: "POST"
           customHeaders: '{"Content-Type": "text/plain", "Authorization": "Basic ${{ secrets.COMMUNITY_RULE_GITHUB_ACTIONS_SECRET }}"}'
-          data: "${{ steps.get-rules.outputs.rules }}"
+          data: "${{ steps.get-rules.outputs.content }}"
