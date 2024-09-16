@@ -1,0 +1,29 @@
+name: Release Rule
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          check-latest: true
+      - run: npm ci
+      - run: npm run format:check
+      - run: npm test
+      - name: Read rules.yaml
+        id: get-rules
+        run: echo "rules=$(cat rules.yaml)" >> $GITHUB_OUTPUT
+      - name: Deploy
+        uses: fjogeleit/http-request-action@v1
+        with:
+          url: "https://linksanitizer.com/api/v1/community-rules"
+          method: "POST"
+          customHeaders: '{"Content-Type": "text/plain", Authorization: "Basic ${{ secrets.COMMUNITY_RULE_GITHUB_ACTIONS_SECRET }}"}'
+          data: "${{ steps.get-rules.outputs.rules }}"
