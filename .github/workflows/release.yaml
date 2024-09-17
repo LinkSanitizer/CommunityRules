@@ -19,7 +19,7 @@ jobs:
       - run: npm test
       - name: Read rules.yaml
         id: get-rules
-        uses: jaywcjlove/github-action-read-file@main
+        uses: jaywcjlove/github-action-read-file@v2.0.0
         with:
           path: rules.yaml
       - name: Deploy
